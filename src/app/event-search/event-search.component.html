@@ -1,0 +1,14 @@
+<div>
+    <input [(ngModel)]="searchTerm" placeholder="Busca eventos deportivos" />
+    <button (click)="searchEvents()">Buscar</button>
+
+    <!-- Verificar si events no es null/undefined y tiene longitud -->
+    <div *ngIf="(events || []).length > 0">
+        <h3>Resultados:</h3>
+        <ul>
+            <li *ngFor="let event of events">
+                {{ event.name }} - {{ event.date | date: 'shortDate' }}
+            </li>
+        </ul>
+    </div>
+</div>
