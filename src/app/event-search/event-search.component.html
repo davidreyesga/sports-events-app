@@ -4,11 +4,16 @@
 
     <!-- Verificar si events no es null/undefined y tiene longitud -->
     <div *ngIf="(events || []).length > 0">
-        <h3>Resultados:</h3>
+            <h3>Resultados:</h3>
         <ul>
             <li *ngFor="let event of events">
-                {{ event.name }} - {{ event.date | date: 'shortDate' }}
+                <strong>{{ event.assetName }}</strong> - 
+                {{ event.place?.cityName }}, {{ event.place?.stateProvinceCode }} 
+                ({{ event.activityStartDate | date: 'shortDate' }})
             </li>
         </ul>
+        </div>
+        <ng-template #noResults>
+        <p>No se encontraron eventos.</p>
+        </ng-template>
     </div>
-</div>
