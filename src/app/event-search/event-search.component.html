@@ -1,19 +1,35 @@
 <div>
-    <input [(ngModel)]="searchTerm" placeholder="Busca eventos deportivos" />
-    <button (click)="searchEvents()">Buscar</button>
+    <!-- Campo para ingresar la ubicación (ej. "Paris") -->
+    <input [(ngModel)]="searchTerm" placeholder="Busca eventos por ubicación" />
 
-    <!-- Verificar si events no es null/undefined y tiene longitud -->
-    <div *ngIf="(events || []).length > 0">
-            <h3>Resultados:</h3>
+    <!-- Selector de deporte (ej. "Running") -->
+    <div>
+        <label for="activity">Selecciona un deporte:</label>
+        <select [(ngModel)]="selectedActivity" id="activity">
+            <option value="" selected>Todos los deportes</option>
+            <option *ngFor="let activity of enduranceActivities" [value]="activity">
+            {{ activity }}
+            </option>
+        </select>
+    </div>
+
+    <!-- Botón para buscar -->
+    <button (click)="searchEvents()">Buscar</button>
+</div>
+<!-- Mostrar resultados -->
+    <div *ngIf="(events || []).length > 0; else noResults">
+        <h3>Resultados:</h3>
         <ul>
             <li *ngFor="let event of events">
-                <strong>{{ event.assetName }}</strong> - 
-                {{ event.place?.cityName }}, {{ event.place?.stateProvinceCode }} 
-                ({{ event.activityStartDate | date: 'shortDate' }})
+                <strong>{{ event.assetName }}</strong><br />
+                <span>Ubicación: {{ event.place?.cityName }}, {{ event.place?.stateProvinceCode }}</span><br />
+                <span>Fecha: {{ event.activityStartDate | date: 'shortDate' }}</span><br />
+                <span>Deporte: {{ event.assetChannels?.[0]?.channel?.channelName }}</span>
+                <hr />
             </li>
         </ul>
-        </div>
-        <ng-template #noResults>
-        <p>No se encontraron eventos.</p>
-        </ng-template>
     </div>
+
+    <ng-template #noResults>
+        <p>No se encontraron eventos con esos filtros.</p>
+    </ng-template>
