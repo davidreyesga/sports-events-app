@@ -12,9 +12,8 @@ import { ActiveEventsService } from '../services/active-events.service';
   imports: [CommonModule, FormsModule, DatePipe],
 })
 export class EventSearchComponent {
-  // El texto que ingresa el usuario (ej. "Paris")
+  // Campos para ubicación y deporte
   searchTerm: string = '';
-  // Lista de deportes disponibles
   enduranceActivities: string[] = [
     'Running',
     'Cycling',
@@ -24,20 +23,24 @@ export class EventSearchComponent {
     'Walking',
     'Mountain Biking',
   ];
-  // El deporte seleccionado
   selectedActivity: string = '';
+
+  // Campos para filtrar fechas
+  startDate?: string; // "YYYY-MM-DD"
+  endDate?: string;   // "YYYY-MM-DD"
 
   // Resultados
   events: any[] = [];
 
   constructor(private activeEventsService: ActiveEventsService) {}
 
-  // ÚNICA BÚSQUEDA que combina ubicación y deporte
   searchEvents() {
-    console.log('Buscando eventos para ubicación:', this.searchTerm, 'y deporte:', this.selectedActivity);
+    console.log('Buscando eventos para ubicación:', this.searchTerm);
+    console.log('Deporte:', this.selectedActivity);
+    console.log('Fecha inicio:', this.startDate, 'Fecha fin:', this.endDate);
 
     this.activeEventsService
-      .searchEvents(this.searchTerm, this.selectedActivity)
+      .searchEvents(this.searchTerm, this.selectedActivity, this.startDate, this.endDate)
       .subscribe({
         next: (response) => {
           console.log(response);

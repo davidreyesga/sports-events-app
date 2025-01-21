@@ -12,30 +12,37 @@ export class ActiveEventsService {
   constructor(private http: HttpClient) {}
 
   /**
-   * Busca eventos combinando ubicación y deporte.
-   * @param location El valor que ingresa el usuario (por ejemplo: "Paris").
-   * @param topic El deporte seleccionado (por ejemplo: "Running").
+   * Busca eventos combinando ubicación (near), deporte (topicName) y fechas (start_date).
    */
-  searchEvents(location: string, topic: string): Observable<any> {
+  searchEvents(location: string, topic: string, startDate?: string, endDate?: string): Observable<any> {
     // Construimos la URL con los filtros necesarios.
-    // category=event para que devuelva eventos.
-    // near=location para filtrar por ubicación.
-    // topicName=topic para filtrar por deporte.
-    // radius=50 (opcional) para ampliar la búsqueda en 50 millas alrededor.
-    let url = `${this.baseUrl}?api_key=${this.apiKey}&category=event`;
+    // category=event → Para obtener eventos.
+    // near= → Ubicación
+    // topicName= → Deporte
+    // start_date → Fecha o rango de fechas
+    // radius=50 → Para abarcar un radio de 50 millas (opcional)
+    let url = `${this.baseUrl}?api_key=${this.apiKey}&category=event&radius=50`;
 
-    // Si hay texto en "location", lo usamos en 'near'
     if (location) {
       url += `&near=${encodeURIComponent(location)}`;
     }
 
-    // Si hay un deporte seleccionado, lo usamos en 'topicName'
     if (topic) {
       url += `&topicName=${encodeURIComponent(topic)}`;
     }
 
-    // Agregamos un radio de búsqueda de 50 millas (opcional, pero recomendable)
-    url += `&radius=50`;
+    // Si el usuario introduce fechas, construimos el rango para start_date
+    // Puedes usar también end_date para filtrar la fecha de fin del evento, pero la documentación
+    // generalmente usa start_date con rango (start_date=YYYY-MM-DD..YYYY-MM-DD).
+    if (startDate || endDate) {
+      // Formato: YYYY-MM-DD..YYYY-MM-DD
+      //  - "startDate.." si solo hay fecha de inicio
+      //  - "..endDate"  si solo hay fecha de fin
+      //  - "startDate..endDate" si hay ambas
+      const rangeStart = startDate ? startDate : '';
+      const rangeEnd = endDate ? endDate : '';
+      url += `&start_date=${rangeStart}..${rangeEnd}`;
+    }
 
     console.log('URL generada:', url);
     return this.http.get(url);
