@@ -1,42 +1,52 @@
+<!-- src/app/event-search/event-search.component.html -->
 <div>
-    <!-- Campo para ingresar la ubicación (ej. "Paris") -->
-    <input [(ngModel)]="searchTerm" placeholder="Ubicación (ej. Paris)" />
+    <!-- Campo para la ubicación -->
+    <input [(ngModel)]="searchTerm" placeholder="Ubicación" />
   
-    <!-- Selector de deporte (ej. "Running") -->
-    <div>
-      <label for="activity">Selecciona un deporte:</label>
-      <select [(ngModel)]="selectedActivity" id="activity">
-        <option value="" selected>Todos los deportes</option>
-        <option *ngFor="let activity of enduranceActivities" [value]="activity">
-          {{ activity }}
-        </option>
-      </select>
-    </div>
+    <!-- Selector de deporte -->
+    <label for="activity">Deporte:</label>
+    <select [(ngModel)]="selectedActivity" id="activity">
+      <option value="" selected>Todos</option>
+      <option *ngFor="let activity of enduranceActivities" [value]="activity">
+        {{ activity }}
+      </option>
+    </select>
   
-    <!-- Campos para fechas -->
-    <div>
-      <label for="startDate">Fecha de inicio:</label>
-      <input type="date" [(ngModel)]="startDate" id="startDate" />
+    <!-- Fechas -->
+    <label for="startDate">Inicio:</label>
+    <input type="date" [(ngModel)]="startDate" id="startDate" />
   
-      <label for="endDate">Fecha de fin:</label>
-      <input type="date" [(ngModel)]="endDate" id="endDate" />
-    </div>
+    <label for="endDate">Fin:</label>
+    <input type="date" [(ngModel)]="endDate" id="endDate" />
   
-    <!-- Botón para buscar -->
+    <!-- Botón de búsqueda -->
     <button (click)="searchEvents()">Buscar</button>
   </div>
   
-  <!-- Mostrar resultados -->
+  <!-- Resultados -->
   <div *ngIf="(events || []).length > 0; else noResults">
-    <h3>Resultados:</h3>
+    <h3>Resultados: Página {{currentPage}} / {{totalPages}}</h3>
+    <p>Total de eventos: {{ totalResults }}</p>
     <ul>
       <li *ngFor="let event of events">
         <strong>{{ event.assetName }}</strong><br />
         <span>Ubicación: {{ event.place?.cityName }}, {{ event.place?.stateProvinceCode }}</span><br />
-        <span>Fecha: {{ event.activityStartDate | date: 'shortDate' }}</span><br />
+        <span>Fecha: {{ event.activityStartDate | date:'shortDate' }}</span><br />
+  
+        <!-- Botón favoritos -->
+        <button (click)="toggleFavorite(event)">
+          {{ isFavorite(event.assetGuid) ? 'Quitar de favoritos' : 'Agregar a favoritos' }}
+        </button>
         <hr />
       </li>
     </ul>
+  
+    <!-- Navegación de páginas -->
+    <div style="text-align: center;">
+      <button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
+      <span style="margin: 0 1rem;">Página {{currentPage}} / {{totalPages}}</span>
+      <button (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
+    </div>
   </div>
   
   <ng-template #noResults>

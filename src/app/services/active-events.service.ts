@@ -12,15 +12,20 @@ export class ActiveEventsService {
   constructor(private http: HttpClient) {}
 
   /**
-   * Busca eventos combinando ubicación (near), deporte (topicName) y fechas (start_date).
+   * Busca eventos combinando:
+   * - ubicación (near)
+   * - deporte (topicName)
+   * - rango de fechas (start_date)
+   * - paginación (current_page, per_page)
    */
-  searchEvents(location: string, topic: string, startDate?: string, endDate?: string): Observable<any> {
-    // Construimos la URL con los filtros necesarios.
-    // category=event → Para obtener eventos.
-    // near= → Ubicación
-    // topicName= → Deporte
-    // start_date → Fecha o rango de fechas
-    // radius=50 → Para abarcar un radio de 50 millas (opcional)
+  searchEvents(
+    location: string, 
+    topic: string, 
+    startDate?: string, 
+    endDate?: string,
+    currentPage: number = 1,
+    perPage: number = 5
+  ): Observable<any> {
     let url = `${this.baseUrl}?api_key=${this.apiKey}&category=event&radius=50`;
 
     if (location) {
@@ -31,18 +36,15 @@ export class ActiveEventsService {
       url += `&topicName=${encodeURIComponent(topic)}`;
     }
 
-    // Si el usuario introduce fechas, construimos el rango para start_date
-    // Puedes usar también end_date para filtrar la fecha de fin del evento, pero la documentación
-    // generalmente usa start_date con rango (start_date=YYYY-MM-DD..YYYY-MM-DD).
+    // Fecha de inicio y/o fin
     if (startDate || endDate) {
-      // Formato: YYYY-MM-DD..YYYY-MM-DD
-      //  - "startDate.." si solo hay fecha de inicio
-      //  - "..endDate"  si solo hay fecha de fin
-      //  - "startDate..endDate" si hay ambas
       const rangeStart = startDate ? startDate : '';
       const rangeEnd = endDate ? endDate : '';
       url += `&start_date=${rangeStart}..${rangeEnd}`;
     }
+
+    // Parámetros de paginación
+    url += `&current_page=${currentPage}&per_page=${perPage}`;
 
     console.log('URL generada:', url);
     return this.http.get(url);

@@ -1,18 +1,15 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { provideRouter } from '@angular/router';
 import { importProvidersFrom } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { provideRouter } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { AppComponent } from './app/app.component';
-import { routes } from './routes';
+import { AppComponent } from './app/app.component'; // Tu componente raíz con <router-outlet> (opcional)
+import { routes } from './routes'; // El array de rutas que creaste en src/routes.ts
 
 bootstrapApplication(AppComponent, {
   providers: [
+    // Importamos el HttpClientModule para hacer peticiones HTTP
+    importProvidersFrom(HttpClientModule),
+    // Inyectamos las rutas definidas en routes
     provideRouter(routes),
-    importProvidersFrom(CommonModule), // Directivas como *ngIf, *ngFor
-    importProvidersFrom(FormsModule), // [(ngModel)] para formularios básicos
-    importProvidersFrom(ReactiveFormsModule), // Formulario reactivo
-    importProvidersFrom(HttpClientModule), // Consumir APIs
   ],
-});
+}).catch((err) => console.error(err));
