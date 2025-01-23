@@ -2,14 +2,15 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { AppComponent } from './app/app.component'; // Tu componente raíz con <router-outlet> (opcional)
-import { routes } from './routes'; // El array de rutas que creaste en src/routes.ts
+import { provideAnimations } from '@angular/platform-browser/animations';
+
+import { AppComponent } from './app/app.component'; 
+import { routes } from './routes';
 
 bootstrapApplication(AppComponent, {
   providers: [
-    // Importamos el HttpClientModule para hacer peticiones HTTP
-    importProvidersFrom(HttpClientModule),
-    // Inyectamos las rutas definidas en routes
     provideRouter(routes),
+    importProvidersFrom(HttpClientModule),
+    provideAnimations(), // Habilita animaciones
   ],
 }).catch((err) => console.error(err));

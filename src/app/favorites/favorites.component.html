@@ -1,24 +1,33 @@
 <!-- src/app/favorites/favorites.component.html -->
+
 <div>
-    <h2>Mis eventos favoritos</h2>
-    <div *ngIf="favoriteEvents.length > 0; else noFavs">
-      <ul>
-        <li *ngFor="let event of favoriteEvents">
-          <strong>{{ event.assetName }}</strong><br />
-          <span>Ubicación: {{ event.place?.cityName }}, {{ event.place?.stateProvinceCode }}</span><br />
-          <span>Fecha: {{ event.activityStartDate }}</span><br />
-  
-          <!-- Botón para quitar de favoritos -->
-          <button (click)="removeFromFavorites(event.assetGuid)">
-            Quitar de favoritos
-          </button>
-          <hr />
-        </li>
-      </ul>
-    </div>
-  
-    <ng-template #noFavs>
-      <p>No tienes eventos favoritos.</p>
-    </ng-template>
+  <h2>Mis eventos favoritos</h2>
+
+  <!-- Paso 3: Agregar un datepicker sencillo -->
+  <mat-form-field appearance="outline">
+    <mat-label>Selecciona una fecha</mat-label>
+    <input matInput [matDatepicker]="picker" placeholder="Ej. 10/10/2025" />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <div *ngIf="favoriteEvents.length > 0; else noFavs">
+    <ul>
+      <li *ngFor="let event of favoriteEvents">
+        <strong>{{ event.assetName }}</strong><br />
+        <span>Ubicación: {{ event.place?.cityName }}, {{ event.place?.stateProvinceCode }}</span><br />
+        <span>Fecha: {{ event.activityStartDate }}</span><br />
+
+        <button (click)="removeFromFavorites(event.assetGuid)">
+          Quitar de favoritos
+        </button>
+        <hr />
+      </li>
+    </ul>
   </div>
+
+  <ng-template #noFavs>
+    <p>No tienes eventos favoritos.</p>
+  </ng-template>
+</div>
   
