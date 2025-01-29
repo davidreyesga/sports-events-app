@@ -1,0 +1,20 @@
+/* src/app/schedule/schedule.component.css */
+
+/* src/app/schedule/schedule.component.css */
+
+/* Estilos básicos para el componente Schedule */
+div {
+    padding: 1rem;
+  }
+  
+  h2 {
+    color: #3f51b5;
+    margin-bottom: 1rem;
+  }
+  
+  /* Ajustar el ancho del calendario si es necesario */
+  full-calendar {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
