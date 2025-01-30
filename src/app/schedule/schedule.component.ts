@@ -2,16 +2,19 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-// Importaciones de FullCalendar
-import { FullCalendarModule } from '@fullcalendar/angular'; // Importar FullCalendarModule
+// FullCalendar
+import { FullCalendarModule } from '@fullcalendar/angular';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { CalendarOptions } from '@fullcalendar/core';
 
+// FavoritesService
+import { FavoritesService } from '../services/favorites.service';
+
 @Component({
   selector: 'app-schedule',
   standalone: true,
-  imports: [CommonModule, FullCalendarModule], // Añadir FullCalendarModule a los imports
+  imports: [CommonModule, FullCalendarModule],
   templateUrl: './schedule.component.html',
   styleUrls: ['./schedule.component.css'],
 })
@@ -19,20 +22,26 @@ export class ScheduleComponent implements OnInit {
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
     plugins: [dayGridPlugin, interactionPlugin],
-    // Aquí puedes añadir más opciones de configuración según tus necesidades
-    events: [], // Inicialmente vacío, se llenará con los eventos favoritos
-    dateClick: this.handleDateClick.bind(this), // Vincular el manejador de clics en fechas
+    events: [], // Se llenará con los eventos favoritos
+    dateClick: this.handleDateClick.bind(this),
   };
 
-  constructor() {}
+  constructor(private favoritesService: FavoritesService) {}
 
   ngOnInit(): void {
-    // Aquí podrías cargar eventos iniciales si es necesario
+    // Obtener la lista de favoritos
+    const favorites = this.favoritesService.getFavorites();
+
+    // Transformar cada favorito al formato que FullCalendar requiere
+    const transformedEvents = favorites.map(fav => ({
+      title: fav.assetName,
+      start: fav.activityStartDate,
+    }));
+
+    // Asignar los eventos transformados a FullCalendar
+    this.calendarOptions.events = transformedEvents;
   }
 
-  /**
-   * Manejador para el evento de clic en una fecha del calendario
-   */
   handleDateClick(arg: any): void {
     alert('Fecha clickeada: ' + arg.dateStr);
   }
