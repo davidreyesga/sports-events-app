@@ -1,55 +1,78 @@
 <!-- src/app/event-search/event-search.component.html -->
-<div>
-    <!-- Campo para la ubicación -->
-    <input [(ngModel)]="searchTerm" placeholder="Ubicación" />
-  
-    <!-- Selector de deporte -->
-    <label for="activity">Deporte:</label>
-    <select [(ngModel)]="selectedActivity" id="activity">
-      <option value="" selected>Todos</option>
-      <option *ngFor="let activity of enduranceActivities" [value]="activity">
-        {{ activity }}
-      </option>
-    </select>
-  
-    <!-- Fechas -->
-    <label for="startDate">Inicio:</label>
-    <input type="date" [(ngModel)]="startDate" id="startDate" />
-  
-    <label for="endDate">Fin:</label>
-    <input type="date" [(ngModel)]="endDate" id="endDate" />
-  
-    <!-- Botón de búsqueda -->
-    <button (click)="searchEvents()">Buscar</button>
-  </div>
-  
-  <!-- Resultados -->
-  <div *ngIf="(events || []).length > 0; else noResults">
-    <h3>Resultados: Página {{currentPage}} / {{totalPages}}</h3>
-    <p>Total de eventos: {{ totalResults }}</p>
-    <ul>
-      <li *ngFor="let event of events">
-        <strong>{{ event.assetName }}</strong><br />
-        <span>Ubicación: {{ event.place?.cityName }}, {{ event.place?.stateProvinceCode }}</span><br />
-        <span>Fecha: {{ event.activityStartDate | date:'shortDate' }}</span><br />
-  
-        <!-- Botón favoritos -->
-        <button (click)="toggleFavorite(event)">
-          {{ isFavorite(event.assetGuid) ? 'Quitar de favoritos' : 'Agregar a favoritos' }}
+<div class="search-container">
+  <mat-card>
+    <mat-card-content>
+      <form>
+        <!-- Campo para la ubicación -->
+        <mat-form-field appearance="fill">
+          <mat-label>Ubicación</mat-label>
+          <input matInput [(ngModel)]="searchTerm" name="searchTerm" placeholder="Ingrese ubicación" />
+        </mat-form-field>
+
+        <!-- Selector de deporte -->
+        <mat-form-field appearance="fill">
+          <mat-label>Deporte</mat-label>
+          <mat-select [(ngModel)]="selectedActivity" name="selectedActivity">
+            <mat-option value="">Todos</mat-option>
+            <mat-option *ngFor="let activity of enduranceActivities" [value]="activity">
+              {{ activity }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Fecha de inicio -->
+        <mat-form-field appearance="fill">
+          <mat-label>Fecha de inicio</mat-label>
+          <input matInput [matDatepicker]="startPicker" [(ngModel)]="startDate" name="startDate" placeholder="Seleccione fecha de inicio" />
+          <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
+        </mat-form-field>
+
+        <!-- Fecha de fin -->
+        <mat-form-field appearance="fill">
+          <mat-label>Fecha de fin</mat-label>
+          <input matInput [matDatepicker]="endPicker" [(ngModel)]="endDate" name="endDate" placeholder="Seleccione fecha de fin" />
+          <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+          <mat-datepicker #endPicker></mat-datepicker>
+        </mat-form-field>
+
+        <!-- Botón de búsqueda -->
+        <button mat-raised-button color="primary" type="button" (click)="searchEvents()">
+          Buscar
         </button>
-        <hr />
-      </li>
-    </ul>
-  
-    <!-- Navegación de páginas -->
-    <div style="text-align: center;">
-      <button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
-      <span style="margin: 0 1rem;">Página {{currentPage}} / {{totalPages}}</span>
-      <button (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
-    </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div class="results-container" *ngIf="(events || []).length > 0; else noResults">
+  <h3>Resultados: Página {{ currentPage }} / {{ totalPages }}</h3>
+  <p>Total de eventos: {{ totalResults }}</p>
+  <ul>
+    <li *ngFor="let event of events">
+      <mat-card>
+        <mat-card-title>{{ event.assetName }}</mat-card-title>
+        <mat-card-content>
+          <p>Ubicación: {{ event.place?.cityName }}, {{ event.place?.stateProvinceCode }}</p>
+          <p>Fecha: {{ event.activityStartDate | date:'shortDate' }}</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button (click)="toggleFavorite(event)">
+            {{ isFavorite(event.assetGuid) ? 'Quitar de favoritos' : 'Agregar a favoritos' }}
+          </button>
+        </mat-card-actions>
+      </mat-card>
+      <hr />
+    </li>
+  </ul>
+
+  <div class="pagination" style="text-align: center;">
+    <button mat-button (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
+    <span style="margin: 0 1rem;">Página {{ currentPage }} / {{ totalPages }}</span>
+    <button mat-button (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
   </div>
-  
-  <ng-template #noResults>
-    <p>No se encontraron eventos con esos filtros.</p>
-  </ng-template>
-  
+</div>
+
+<ng-template #noResults>
+  <p>No se encontraron eventos con esos filtros.</p>
+</ng-template>

@@ -3,13 +3,34 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common'; // Para *ngIf, *ngFor
 import { FormsModule } from '@angular/forms';   // Para [(ngModel)]
 import { DatePipe } from '@angular/common';     // Para | date
+
+// Angular Material modules
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+
 import { ActiveEventsService } from '../services/active-events.service';
 import { FavoritesService } from '../services/favorites.service';
 
 @Component({
   selector: 'app-event-search',
   standalone: true,
-  imports: [CommonModule, FormsModule, DatePipe],
+  imports: [
+    CommonModule,
+    FormsModule,
+    DatePipe,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatButtonModule,
+    MatCardModule
+  ],
   templateUrl: './event-search.component.html',
   styleUrls: ['./event-search.component.css'],
 })

@@ -2,13 +2,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FavoritesService } from '../services/favorites.service';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-favorites',
   standalone: true,
-  imports: [
-    CommonModule
-  ],
+  imports: [CommonModule, MatCardModule, MatButtonModule],
   templateUrl: './favorites.component.html',
   styleUrls: ['./favorites.component.css'],
 })
@@ -27,6 +27,6 @@ export class FavoritesComponent implements OnInit {
 
   removeFromFavorites(assetGuid: string): void {
     this.favoritesService.removeFavorite(assetGuid);
-    this.loadFavorites(); // Recarga la lista tras eliminar
+    this.loadFavorites();
   }
 }

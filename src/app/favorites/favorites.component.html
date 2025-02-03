@@ -1,27 +1,20 @@
 <!-- src/app/favorites/favorites.component.html -->
-
 <div>
   <h2>Mis eventos favoritos</h2>
-
-  <!-- Eliminado el bloque del Datepicker -->
-
-  <!-- Lista de favoritos -->
   <div *ngIf="favoriteEvents.length > 0; else noFavs">
-    <ul>
-      <li *ngFor="let event of favoriteEvents">
-        <strong>{{ event.assetName }}</strong><br />
-        <span>Ubicación: {{ event.place?.cityName }}, {{ event.place?.stateProvinceCode }}</span><br />
-        <span>Fecha: {{ event.activityStartDate }}</span><br />
-        
-        <!-- Botón para quitar de favoritos -->
-        <button (click)="removeFromFavorites(event.assetGuid)">
+    <mat-card *ngFor="let event of favoriteEvents" style="margin-bottom: 1rem;">
+      <mat-card-title>{{ event.assetName }}</mat-card-title>
+      <mat-card-content>
+        <p>Ubicación: {{ event.place?.cityName }}, {{ event.place?.stateProvinceCode }}</p>
+        <p>Fecha: {{ event.activityStartDate }}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button (click)="removeFromFavorites(event.assetGuid)">
           Quitar de favoritos
         </button>
-        <hr />
-      </li>
-    </ul>
+      </mat-card-actions>
+    </mat-card>
   </div>
-
   <ng-template #noFavs>
     <p>No tienes eventos favoritos.</p>
   </ng-template>

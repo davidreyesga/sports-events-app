@@ -1,30 +1,41 @@
 /* src/app/favorites/favorites.component.css */
 
-/* Eliminados los estilos relacionados con el Datepicker */
-
 /* Estilos básicos */
 h2 {
-    margin-top: 1rem;
-  }
-  
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  li {
-    margin-bottom: 1rem;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-  }
-  
-  hr {
-    margin-top: 0.5rem;
-  }
-  
-  button {
-    margin-top: 0.5rem;
-    cursor: pointer;
-  }
-  
+  margin-top: 1rem;
+  font-size: 1.5rem;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* Ajustar estilos de las cards de Angular Material */
+/* Utilizamos ::ng-deep para penetrar la encapsulación y afectar a los mat-card */
+:host ::ng-deep mat-card {
+  max-width: 600px;      /* Limitar el ancho máximo de la card */
+  margin: 1rem auto;     /* Centrar la card horizontalmente y agregar margen vertical */
+  font-size: 0.875rem;   /* Reducir el tamaño de la fuente dentro de la card */
+}
+
+/* Opcional: ajustar el tamaño del título dentro de la card */
+:host ::ng-deep mat-card-title {
+  font-size: 1rem;
+}
+
+hr {
+  margin-top: 0.5rem;
+}
+
+button {
+  margin-top: 0.5rem;
+  cursor: pointer;
+}

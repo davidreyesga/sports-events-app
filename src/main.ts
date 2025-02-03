@@ -6,11 +6,12 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app/app.component'; 
 import { routes } from './routes';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(routes),
     importProvidersFrom(HttpClientModule),
-    provideAnimations(), // Habilita animaciones
+    provideAnimations(), provideAnimationsAsync(), // Habilita animaciones
   ],
 }).catch((err) => console.error(err));
